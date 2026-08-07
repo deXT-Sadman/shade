@@ -1,4 +1,7 @@
 # Miscellaneous
+.env
+*.jks
+key.properties
 *.class
 *.log
 *.pyc
