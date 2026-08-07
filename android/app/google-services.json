@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "403767955430",
+    "project_id": "shade-b4f08",
+    "storage_bucket": "shade-b4f08.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403767955430:android:2ef6e3c830ff5d35b21027",
+        "android_client_info": {
+          "package_name": "com.sadman.shade"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxRos0vS-vLQlsU7f24f8IJAdt7znjT7s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
