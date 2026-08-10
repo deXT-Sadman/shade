@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shade/features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -21,8 +22,10 @@ class OtpScreen extends StatelessWidget {
           );
         }
         if (state is AuthSuccess) {
-          // Day 3 will route to the Dashboard here.
-          Navigator.of(context).popUntil((route) => route.isFirst);
+          Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const DashboardScreen()),
+            (route) => false,
+          );
         }
       },
       child: Scaffold(

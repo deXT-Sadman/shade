@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shade/features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
@@ -70,6 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             );
           }
+          if (state is AuthSuccess) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const DashboardScreen()),
+              (route) => false,
+            );
+          }
         },
         builder: (context, state) {
           final isLoading = state is AuthLoading;
@@ -85,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         size: 64, color: AppColors.neonCyan),
                     const SizedBox(height: 16),
                     Text(
-                      'Shadow Chat',
+                      'Shade',
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
