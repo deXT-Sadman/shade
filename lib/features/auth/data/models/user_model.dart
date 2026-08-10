@@ -34,3 +34,19 @@ class UserModel extends UserEntity {
     };
   }
 }
+
+/// Wraps the full `{ accessToken, user }` shape returned by
+/// /auth/verify-pin and /auth/gmail.
+class AuthResponseModel {
+  final String accessToken;
+  final UserModel user;
+
+  AuthResponseModel({required this.accessToken, required this.user});
+
+  factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
+    return AuthResponseModel(
+      accessToken: json['accessToken']?.toString() ?? '',
+      user: UserModel.fromJson(json['user'] as Map<String, dynamic>),
+    );
+  }
+}

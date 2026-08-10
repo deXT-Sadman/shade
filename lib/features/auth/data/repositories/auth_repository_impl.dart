@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../../core/constants/app_constants.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failures.dart';
 import '../../../../core/security/key_manager.dart';
@@ -37,15 +38,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }) async {
     try {
       final publicKey = await keyManager.getOrCreatePublicKey();
-      final user = await remoteDataSource.verifyPin(
+      final authResponse = await remoteDataSource.verifyPin(
         phone: phone,
         pin: pin,
         publicKey: publicKey,
       );
-      // Note: JWT persistence happens via a token field the backend returns;
-      // extend UserModel/response parsing to include & store it here once
-      // your backend contract is finalized.
-      return Right(user);
+      await _persistSession(authResponse.accessToken, authResponse.user.id);
+      return Right(authResponse.user);
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
     } on ServerException catch (e) {
@@ -57,15 +56,21 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, UserEntity>> loginWithGmail(String idToken) async {
     try {
       final publicKey = await keyManager.getOrCreatePublicKey();
-      final user = await remoteDataSource.loginWithGmail(
+      final authResponse = await remoteDataSource.loginWithGmail(
         idToken: idToken,
         publicKey: publicKey,
       );
-      return Right(user);
+      await _persistSession(authResponse.accessToken, authResponse.user.id);
+      return Right(authResponse.user);
     } on NetworkException catch (e) {
       return Left(NetworkFailure(e.message));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     }
+  }
+
+  Future<void> _persistSession(String accessToken, String userId) async {
+    await secureStorage.write(key: AppConstants.kJwtToken, value: accessToken);
+    await secureStorage.write(key: AppConstants.kUserId, value: userId);
   }
 }

@@ -3,12 +3,12 @@ import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<void> sendOtp(String phone);
-  Future<UserModel> verifyPin({
+  Future<AuthResponseModel> verifyPin({
     required String phone,
     required String pin,
     required String publicKey,
   });
-  Future<UserModel> loginWithGmail({
+  Future<AuthResponseModel> loginWithGmail({
     required String idToken,
     required String publicKey,
   });
@@ -26,7 +26,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<UserModel> verifyPin({
+  Future<AuthResponseModel> verifyPin({
     required String phone,
     required String pin,
     required String publicKey,
@@ -38,12 +38,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'publicKey': publicKey,
       }),
     );
-    final data = response.data['user'] ?? response.data;
-    return UserModel.fromJson(data);
+    return AuthResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 
   @override
-  Future<UserModel> loginWithGmail({
+  Future<AuthResponseModel> loginWithGmail({
     required String idToken,
     required String publicKey,
   }) async {
@@ -53,7 +52,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         'publicKey': publicKey,
       }),
     );
-    final data = response.data['user'] ?? response.data;
-    return UserModel.fromJson(data);
+    return AuthResponseModel.fromJson(response.data as Map<String, dynamic>);
   }
 }
